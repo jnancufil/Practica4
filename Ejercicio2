@@ -1,0 +1,51 @@
+using System;
+using System.IO;
+
+namespace ejercicio2
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            
+            
+            StreamReader sr = new StreamReader("datosPersona.txt"); 
+            
+            string line; 
+            //string line = sr.ReadLine();
+            int num = 0;  
+            while ((line  = sr.ReadLine()) != null ){
+                num++; 
+                string [] palabras = line.Split(','); 
+                Persona per = new Persona(palabras[0],int.Parse(palabras[1]), int.Parse(palabras[2])); 
+                per.imprimir(num);
+                Console.Read(); 
+            }
+            
+            
+            
+            
+            
+            Console.WriteLine("Hello World!");
+            Console.Read(); 
+        }
+    }
+    class Persona {
+        private String _nombre; 
+        private int _edad; 
+        private int _documento; 
+
+        public Persona(){}
+
+        public Persona(String unNombre, int unaEdad, int unDocumento){
+            _nombre = unNombre; 
+            _edad = unaEdad; 
+            _documento = unDocumento; 
+        }
+
+        public void imprimir(int nro){
+             Console.WriteLine($"{nro}) Nombre: {this._nombre} Edad: {this._edad} Dni: {this._documento}");
+        }
+
+    }
+}
