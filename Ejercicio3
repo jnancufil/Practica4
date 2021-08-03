@@ -1,0 +1,60 @@
+using System;
+using System.IO; 
+
+namespace ejercicio3
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+
+            StreamReader sr = new StreamReader("datosPersona.txt");
+            Persona [] vectorDePersonas = new Persona[10];
+            int num = 0; 
+            string line;  
+            
+            Persona min = new Persona("", 999, 000); 
+            while ((line = sr.ReadLine()) != "fin"){
+                string[] palabras = line.Split(','); 
+                vectorDePersonas[num] = new Persona(palabras[0], int.Parse(palabras[1]), int.Parse(palabras[2]));
+                vectorDePersonas[num].imprimir(num);  
+                if (min.EsMayorQue(vectorDePersonas[num])) min= vectorDePersonas[num];
+                num++;
+            }
+             Console.WriteLine("[...] ");
+            Console.ReadLine();
+          
+          
+            Console.WriteLine("Presiones enter para continuar...");
+            Console.ReadLine();
+            Console.WriteLine("La persona mas joven es: "); 
+            min.imprimir(0); 
+            Console.WriteLine("[...] ");
+            Console.ReadLine();
+            Console.WriteLine("Hello World!");
+        }
+    }
+    class Persona {
+        private string _nombre; 
+        private int _edad; 
+        private int _documento; 
+
+        public Persona(){}
+
+        public Persona(string unNombre, int unaEdad, int unDocumento){
+            this._nombre= unNombre; 
+            this._edad = unaEdad; 
+            this._documento = unDocumento; 
+
+        }
+
+        public void imprimir(int nro){
+            Console.WriteLine($"{nro++}) {this._nombre} {this._edad} {this._documento}"); 
+
+        }
+
+        public bool EsMayorQue(Persona p){
+            return this._edad > p._edad; 
+        }
+    }
+}
