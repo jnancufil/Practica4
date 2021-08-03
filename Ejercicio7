@@ -1,0 +1,242 @@
+using System;
+using System.Collections;  
+
+namespace ejercicio7
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Nodo arbol = new Nodo(16); 
+
+   
+            arbol.Insertar(15);
+            arbol.Insertar(25);
+            arbol.Insertar(4);
+            arbol.Insertar(22);
+            arbol.Insertar(27);
+            arbol.Insertar(1);
+            arbol.Insertar(6);
+            arbol.Insertar(21);
+            arbol.Insertar(23);
+            arbol.Insertar(26);
+            arbol.Insertar(29);
+            arbol.Insertar(1);
+            arbol.Insertar(27);
+            arbol.Insertar(58); 
+            arbol.Insertar(7);
+            arbol.Insertar(8);
+            arbol.Insertar(9);
+           
+            ArrayList abb = arbol.GetInorden(); 
+
+            foreach (int aux in abb) {
+                Console.Write ($"{aux} | "); 
+            }
+
+            int h = arbol.GetAltura(); 
+
+        
+            Console.WriteLine(); 
+            Console.WriteLine($"Altura: {h}"); 
+
+            int N = arbol.GetCantNodos(); 
+            Console.WriteLine(); 
+            Console.WriteLine($"Nodos: {N} vs {abb.Count}"); 
+
+            int M = arbol.GetValorMaximo(); 
+            Console.WriteLine(); 
+            Console.WriteLine($"Max: {M}"); 
+
+            int J = arbol.GetValorMinimo(); 
+            Console.WriteLine(); 
+            Console.WriteLine($"Min: {J}");
+
+
+
+
+
+
+            Console.WriteLine("Hello World!");
+            Console.ReadLine();
+        }
+    }
+    class Nodo{
+        private int _dato; 
+        private Nodo _hijoIzquierdo; 
+        private Nodo _hijoDerecho; 
+
+
+	    public Nodo(){}
+
+	    public Nodo(int unDato){
+		this._dato = unDato; 
+		this._hijoIzquierdo = null; 
+		this._hijoDerecho = null; 
+	}
+
+
+
+	 
+
+	public int getDatoRaiz()=> this._dato; 
+	
+	public Nodo getHijoDerecho() => this._hijoDerecho; 
+
+	public Nodo getHijoIzquierdo() => this._hijoIzquierdo; 
+
+	public void setHijoIzquierdo(Nodo unHI) =>this._hijoIzquierdo = unHI;
+	
+	public void setHijoDerecho(Nodo unHD) => this._hijoDerecho = unHD; 
+
+    private bool esHoja()=> ((this.getHijoDerecho() == null)&&(this.getHijoIzquierdo() == null));
+
+
+//Insertar(valor)​: Inserta valor en el árbol descartándolo en caso que ya exista.        
+//   this.esVacio() ? this.getRaiz().setDato(unValor) : (this.getDatoRaiz()< unValor) ? this.getHijoDerecho().Insertar(unValor): (this.getDatoRaiz() > unValor) ? this.getHijoIzquierdo().Insertar(unValor); 
+
+    public void Insertar(int unValor){
+        
+        if(this.getDatoRaiz() == unValor) 
+                    Console.WriteLine("El valor ingresado ya existe en el arbol."); 
+        else{
+           
+            
+            if(this.getDatoRaiz() < unValor){
+                if (this.getHijoDerecho() == null)
+                    this.setHijoDerecho(new Nodo(unValor));
+                else 
+                    this.getHijoDerecho().Insertar(unValor); 
+                    }
+            else {
+                if (this.getHijoIzquierdo() == null) 
+                    this.setHijoIzquierdo(new Nodo(unValor));
+                else 
+                    this.getHijoIzquierdo().Insertar(unValor);  
+            }
+          
+        }       
+    }
+
+    //GetInorden(): devuelve un ArrayList con los valores ordenados en forma creciente.
+
+    public ArrayList GetInorden(){
+        ArrayList arreglo = new ArrayList(); 
+
+        GetInOrden(this, arreglo); 
+        return arreglo; 
+    }
+    
+    private static void GetInOrden(Nodo unAb, ArrayList L){
+        if (unAb != null) {
+            GetInOrden(unAb.getHijoIzquierdo(), L); 
+            L.Add( unAb.getDatoRaiz());
+            GetInOrden(unAb.getHijoDerecho(), L); 
+        }
+    }
+        
+
+    //3. GetAltura(): devuelve la altura del árbol
+
+    public int GetAltura(){
+        int altura = 0; 
+        if (this != null)
+            altura = calcularAltura (this)-1; // el primer nodo se considera  nivel 0
+        return altura; 
+    }
+
+    private static int calcularAltura(Nodo ab){
+        int aux = 0; 
+        if (ab != null){ 
+            aux++; 
+            return aux += Math.Max(calcularAltura(ab.getHijoIzquierdo()), calcularAltura(ab.getHijoDerecho()) );}
+        else
+            return aux; 
+    }
+
+    //4. GetCantNodos(): devuelve la cantidad de nodos que posee el árbol.
+    public int GetCantNodos(){
+        int cantNodos=0;   
+        if (this != null)       
+            cantNodos = contarNodos(this); 
+        return cantNodos; 
+    }
+    private static int contarNodos(Nodo ab){
+        int nodos=0; 
+        nodos++;
+        if (! ab.esHoja()){
+            if (ab.getHijoIzquierdo() != null)
+                nodos +=contarNodos(ab.getHijoIzquierdo()); 
+            if (ab.getHijoDerecho() != null)
+                nodos += contarNodos(ab.getHijoDerecho()); 
+        }
+        return nodos; 
+    }
+
+
+    //GetValorMáximo(): devuelve el valor máximo que contiene el árbol
+
+    public int GetValorMaximo(){
+        int max= 0;
+        if (this != null)
+          max = recorrerArbolDerecho(this);  
+        return max; 
+    }
+
+    private static int recorrerArbolDerecho(Nodo ab){
+        int aux = -9999;
+        if (ab.esHoja())
+            return ab.getDatoRaiz(); 
+        else {
+            if (ab.getHijoDerecho() != null) 
+                aux = recorrerArbolDerecho(ab.getHijoDerecho());
+            }
+        return aux; 
+         
+    }
+
+
+//6. GetValorMínimo(): devuelve el valor mínimo que contiene el árbol
+
+public int GetValorMinimo(){
+    int minimo =0; 
+    if (this != null){
+        minimo = recorrerArbolIzquierdo(this); 
+    }
+    return minimo; 
+}
+
+private static int recorrerArbolIzquierdo(Nodo ab){
+    int aux = 9999; 
+    if (ab.esHoja())
+        return ab.getDatoRaiz(); 
+    else {
+        if (ab.getHijoIzquierdo() != null)
+            aux = recorrerArbolIzquierdo(ab.getHijoIzquierdo());
+        }
+    return aux; 
+     
+} 
+
+       
+       
+        
+        
+        
+        
+        
+        
+        
+        }//clse nodo
+
+
+
+
+
+
+
+      
+    
+   
+
+}
