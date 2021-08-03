@@ -1,0 +1,235 @@
+using System;
+
+namespace ejercicio8
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Matriz A = new Matriz(2, 3);
+            for (int i = 0; i < 6; i++) A.SetElemento(i / 3, i % 3, (i + 1) / 3.0);
+            Console.WriteLine("Impresión de la matriz A");
+            A.Imprimir("0.000");
+            double[,] aux = new double[,] { { 1, 2, 3 }, { 4, 5, 6 }, { 7, 8, 9 } };
+            Matriz B = new Matriz(aux);
+            Console.WriteLine("\nImpresión de la matriz B");
+            B.Imprimir();
+            Console.WriteLine("\nAcceso al elemento B[1,2]={0}", B.GetElemento(1, 2));
+            Console.Write("\nfila 1 de A: ");
+            foreach (double d in A.GetFila(1)) Console.Write("{0:0.0} ", d);
+            Console.Write("\n\nColumna 0 de B: ");
+            foreach (double d in B.GetColumna(0)) Console.Write("{0} ", d);
+            Console.Write("\n\nDiagonal principal de B: ");
+            foreach (double d in B.GetDiagonalPrincipal()) Console.Write("{0} ", d);
+            Console.Write("\n\nDiagonal secundaria de B: ");
+            foreach (double d in B.GetDiagonalSecundaria()) Console.Write("{0} ", d);
+            A.MultiplicarPor(B);
+            Console.WriteLine("\n\nA multiplicado por B");
+            A.Imprimir();
+
+
+
+
+
+            Console.WriteLine();
+            Console.WriteLine("Hello World!");
+            Console.ReadLine();
+
+
+        }
+    }
+    class Matriz{
+        private double[,] _matriz; 
+
+        //public Matriz(int filas, int columnas)
+
+        public Matriz(int filas, int columnas){
+            _matriz = new double [filas, columnas]; 
+        }
+        //public Matriz(double[,] matriz)
+
+        public Matriz(double[,] matriz){
+            _matriz = matriz; 
+        }
+
+        public double[,] GetMatriz()=> this._matriz; 
+        //para agregar el elemento se asume que el numero de fila esta entre 0 y el numero total de filas -1 
+        //lo mismos para las columnas : entre cero y el numero total de columnas -1
+        public void SetElemento(int fila, int columna, double elemento){
+            this.GetMatriz()[fila, columna] = elemento;        
+             }
+
+        public double GetElemento(int fila, int columna){
+            return this.GetMatriz()[fila, columna]; 
+        }
+
+        public void Imprimir(){
+            for (int i = 0; i < this.GetMatriz().GetLength(0); i ++)
+                {
+                    for(int j= 0; j < this.GetMatriz().GetLength(1); j++ ){
+                        Console.Write(this.GetElemento(i,j)+ " "); 
+                    }
+                    Console.WriteLine(); 
+                }
+        }
+
+        public void Imprimir(string formatString){
+
+          for (int i = 0; i < this.GetMatriz().GetLength(0); i ++)
+                {
+                    for(int j= 0; j < this.GetMatriz().GetLength(1); j++ ){
+                        Console.Write(this.GetElemento(i,j).ToString(formatString) + " "); 
+                    }
+                    Console.WriteLine(); 
+                }
+        }
+        private bool filaOk(int fila){
+            return  (fila >=0)&&(fila <= this.GetMatriz().GetLength(0)-1);
+        }
+
+        private bool columnaOk (int columna){
+            return ((columna >= 0) &&(columna<= this.GetMatriz().GetLength(1)-1)); 
+        }
+
+        public double[] GetFila(int fila){
+            double[] filaI = new double[this.GetMatriz().GetLength(1)];
+            if (filaOk(fila)){
+                for (int j= 0; j < this.GetMatriz().GetLength(1); j++)
+                    filaI[j] = this.GetElemento(fila, j); 
+                    }
+            else 
+                Console.WriteLine("El numero de fila no corresponde a una poscion de la matriz"); 
+
+            return filaI;
+        }
+
+        public double[] GetColumna(int columna){
+            double[] columnaJ = new double[this.GetMatriz().GetLength(0)];
+            if (columnaOk(columna)){
+                for (int i= 0; i < this.GetMatriz().GetLength(0); i++)
+                    columnaJ[i]= this.GetElemento(i, columna);
+            }
+            else 
+                Console.WriteLine("El numero de columna no corresponde a una posicion de la matriz"); 
+            return columnaJ; 
+        }
+
+        public double[] GetDiagonalPrincipal(){
+            double[] vector = new double[this.GetMatriz().GetLength(0)];
+
+            if (this.GetMatriz().GetLength(0)== this.GetMatriz().GetLength(1)){
+                    for(int i = 0; i < this.GetMatriz().GetLength(0); i++){
+                     for(int j = 0; j< this.GetMatriz().GetLength(1); j++){
+                         if (i == j) 
+                             vector[i] = this.GetElemento(i,j); 
+                     }
+                 } 
+            }
+            else
+                Console.WriteLine("La matriz no es cuadrada.-"); 
+
+            return vector; 
+        }
+
+        public double[] GetDiagonalSecundaria(){
+             double[] vector = new double[this.GetMatriz().GetLength(0)];
+
+            if (this.GetMatriz().GetLength(0)== this.GetMatriz().GetLength(1)){
+                    for(int i = 0; i < this.GetMatriz().GetLength(0); i++){
+                     for(int j = this.GetMatriz().GetLength(1)-1; j>= 0; j--){
+                         if ((i+j) == (this.GetMatriz().GetLength(1)-1)) 
+                             vector[i] = this.GetElemento(i,j); 
+                     }
+                 } 
+            }
+            else
+                Console.WriteLine("La matriz no es cuadrada.-"); 
+
+            return vector; 
+
+        }
+
+         public double [][] GetArregloDeArreglo(){
+                    double[][] tabla = new double[this.GetMatriz().GetLength(0)][];
+                    for (int i = 0; i < this.GetMatriz().GetLength(0); i++){
+                        tabla[i] = new double [this.GetMatriz().GetLength(1)]; 
+                        for (int j = 0; j< this.GetMatriz().GetLength (1); j++){
+                            tabla[i][j] = this.GetElemento(i,j); 
+                        }
+                    }
+                return tabla; 
+        }
+
+
+        
+        public void Sumarle(Matriz m)
+            {
+           // double[,] suma = new double [this.GetMatriz().GetLength(0), this.GetMatriz().GetLength(1)]; 
+            if ((this.GetMatriz().GetLength(0)==m.GetMatriz().GetLength(0))&&(this.GetMatriz().GetLength(1)==m.GetMatriz().GetLength(1))){
+                    for (int i=0; i< this.GetMatriz().GetLength(0); i++){
+                        for (int j= 0; j< this.GetMatriz().GetLength(1); j++){
+                           // suma[i,j] = this.GetMatriz()[i,j] + m.GetMatriz()[i,j];
+                           this.SetElemento(i, j, (this.GetMatriz()[i,j] + m.GetMatriz()[i,j]));
+                        }
+                    }
+            }
+            else 
+            Console.WriteLine("No se puede realizar la Suma porque las matrices no son del mismo tamaño."); 
+            Console.WriteLine("Fin del metodo suma.- ");  
+             
+        }
+
+        public void Restarle(Matriz m)
+                {
+            //double[,] resta = new double [this.GetMatriz().GetLength(0), this.GetMatriz().GetLength(1)]; 
+            if ((this.GetMatriz().GetLength(0)==m.GetMatriz().GetLength(0))&&(this.GetMatriz().GetLength(1)==m.GetMatriz().GetLength(1))){
+                    for (int i=0; i< this.GetMatriz().GetLength(0); i++){
+                        for (int j= 0; j< this.GetMatriz().GetLength(1); j++){
+                           // resta[i,j] = this.GetMatriz()[i,j] - m.GetMatriz()[i,j];
+                           this.SetElemento(i,j, (this.GetMatriz()[i,j] - m.GetMatriz()[i,j]));
+                        }
+                    }
+            }
+            else 
+            Console.WriteLine("No se puede realizar la Resta porque las matrices no son del mismo tamaño."); 
+            Console.WriteLine("Fin del metodo resta.- ");
+   
+        }
+  
+        public void MultiplicarPor(Matriz m)
+               {
+            double[] filaA; 
+            double[] columnaB; 
+
+            if (this.GetMatriz().GetLength(1)==m.GetMatriz().GetLength(0)){
+                    for (int i=0; i< this.GetMatriz().GetLength(0); i++){
+                        filaA = this.GetFila(i); 
+                        for (int j= 0; j< this.GetMatriz().GetLength(1); j++){
+                            columnaB = m.GetColumna(j); 
+                            this.SetElemento(i,j, multiplicacionArreglos(filaA, columnaB)); 
+                        }
+                    }
+            }
+            else 
+            Console.WriteLine("No coinciden el numero de columnas de la primera matriz con el numero de columnas de la segunda matriz");
+        }
+ 
+        static double multiplicacionArreglos (double[] X, double[] Y){
+	        double producto =0; 
+	        for (int i = 0; i< X.Length; i++){
+		        producto += X[i]*Y[i]; 
+	        }
+	        return producto; 
+        }
+
+
+
+
+
+     
+
+    
+
+
+    }//finmatrizclass
+}
