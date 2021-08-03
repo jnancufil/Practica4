@@ -1,0 +1,53 @@
+using System;
+using System.IO; 
+
+namespace ejercicio1
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+         
+         
+            StreamReader sr = new StreamReader("datosPersona.txt");
+    	    Persona[] vectorDePersonas = new Persona[10]; 
+            Persona per = new Persona(); 
+	    
+        
+            string linea= sr.ReadLine();
+            int nro =0; 
+            while (linea != "fin"){
+                //nro++; 
+                per.nombre = linea; 
+                linea= sr.ReadLine();
+                per.edad =int.Parse(linea); 
+                linea= sr.ReadLine();
+                per.documento = int.Parse(linea); 
+		        vectorDePersonas[nro] = per; 
+                Console.WriteLine($"{nro++}) Nombre: {per.nombre} Edad: {per.edad} Dni: {per.documento}"); 
+                Console.WriteLine("Presione Enter para continuar"); 
+		        per = new Persona();
+                Console.ReadLine();
+                linea= sr.ReadLine();
+            }
+
+            Console.WriteLine("Hello World!");
+
+            Console.ReadLine();
+
+
+
+
+        }
+    }
+
+    class Persona{
+        public String nombre; 
+        public int documento; 
+        public int edad; 
+
+        
+
+
+    }
+}
